@@ -5,14 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dennis Menn</title>
   <meta name="description" content="Dennis Menn — Ph.D. student in ECE at UT Austin, working on efficient generative AI for computer vision.">
+  <meta property="og:title" content="Dennis Menn">
+  <meta property="og:description" content="Ph.D. student at UT Austin working on efficient generative AI for computer vision.">
+  <meta property="og:image" content="https://dennismenn.github.io/assets/lipar_demo_poster.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main>
-    <header class="intro">
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <a class="brand" href="#top">Dennis Menn</a>
+      <div class="navlinks">
+        <a href="#news">News</a>
+        <a href="#research">Research</a>
+        <a href="#education">Education</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
       <img class="photo" src="assets/profile.jpg" alt="Dennis Menn">
-      <div>
+      <div class="hero-text">
+        <p class="eyebrow">Ph.D. Student · UT Austin ECE</p>
         <h1>Dennis Menn</h1>
+        <p class="tagline">Efficient generative AI for computer vision</p>
         <p>
           I am a Ph.D. student in the ECE Department at <a href="https://www.utexas.edu/">UT Austin</a>,
           where I am fortunate to be advised by
@@ -24,87 +43,139 @@
           If you find that we have shared research interests, please feel free to reach out by email;
           I am always open to potential collaborations.
         </p>
-        <p class="links">
-          <a href="assets/Resume.pdf">Resume</a> /
-          <a href="https://www.linkedin.com/in/dennis-menn-425185289/">LinkedIn</a> /
-          <a href="https://github.com/DennisMenn">GitHub</a> /
-          <a href="mailto:dennismenn@utexas.edu">Email</a>
-        </p>
+        <div class="buttons">
+          <a class="btn primary" href="mailto:dennismenn@utexas.edu">Email</a>
+          <a class="btn" href="assets/Resume.pdf">Resume</a>
+          <a class="btn" href="https://github.com/DennisMenn">GitHub</a>
+          <a class="btn" href="https://x.com/MennDennis">X</a>
+          <a class="btn" href="https://www.linkedin.com/in/dennis-menn-425185289/">LinkedIn</a>
+        </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <section>
-      <h2>Education</h2>
-      <ul>
-        <li><b>Ph.D. in ECE</b>, University of Texas at Austin, advised by Prof. Diana Marculescu, August 2023 — Present.</li>
-        <li><b>M.S. in ECE</b>, National Taiwan University, advised by Prof. Lin-shan Lee, GPA: 4.26/4.30, August 2021 — July 2023.</li>
-        <li><b>B.S. in ECE</b>, National Taiwan University, GPA: 4.03/4.30, August 2017 — June 2021.</li>
+  <main>
+    <section id="news">
+      <h2>News</h2>
+      <ul class="timeline">
+        <li>
+          <span class="date">Sep 2026</span>
+          <p>🎉 <a href="https://dennismenn.github.io/lipar/">LIPAR</a> is accepted to <b>NeurIPS 2026</b>!</p>
+        </li>
+        <li>
+          <span class="date">Aug 2026</span>
+          <p>Extended my internship at Roblox through December 18, 2026.</p>
+        </li>
+        <li>
+          <span class="date">May 2026</span>
+          <p>Joined <b>Roblox</b> as a research intern (May 25 – Aug 18), working with <a href="https://www.xunhuang.me/">Xun Huang</a> and <a href="https://gutianpei.github.io/">Tianpei Gu</a>.</p>
+        </li>
       </ul>
     </section>
 
-    <section>
+    <section id="research">
       <h2>Research</h2>
 
-      <article class="paper">
-        <img src="assets/lipar.png" alt="LIPAR results">
-        <div>
-          <h3>Training-Free Latent Inter-frame Pruning with Attention Recovery</h3>
-          <p class="authors"><b>Dennis Menn</b>, Yuedong Yang, Bokun Wang, et al.</p>
-          <p>Proposed a training-free framework that adapts pixel-space compression techniques to latent pruning for video generation. Achieved an average 1.53× throughput boost (19.3 FPS on an RTX 4090) and a 20% memory reduction, without compromising visual quality.</p>
-          <p class="links">
-            <a href="https://dennismenn.github.io/lipar/">Webpage</a> /
-            <a href="https://github.com/DennisMenn/lipar">GitHub</a> /
-            <a href="https://arxiv.org/abs/2603.05811">arXiv</a>
-          </p>
+      <article class="card featured">
+        <div class="demo">
+          <video src="assets/lipar_demo.mp4" poster="assets/lipar_demo_poster.jpg" muted loop playsinline controls preload="metadata"></video>
+          <p class="demo-caption"><span class="live-dot"></span><span>Live demo: Streaming LIPAR editing a webcam feed in real time at ~20 FPS on a single RTX 4090 (<a href="https://x.com/MennDennis/status/2039011622581051576">X thread</a>)</span></p>
+        </div>
+        <div class="card-body">
+          <img src="assets/lipar.png" alt="LIPAR results">
+          <div>
+            <div class="badges"><span class="badge hot">NeurIPS 2026</span><span class="badge">Featured</span></div>
+            <h3><a href="https://dennismenn.github.io/lipar/">Training-Free Latent Inter-frame Pruning with Attention Recovery</a></h3>
+            <p class="authors"><b>Dennis Menn</b>, Yuedong Yang, Bokun Wang, et al.</p>
+            <p>Proposed a training-free framework that adapts pixel-space compression techniques to latent pruning for video generation. Achieved an average 1.53× throughput boost (19.3 FPS on an RTX 4090) and a 20% memory reduction, without compromising visual quality.</p>
+            <div class="chips">
+              <a href="https://dennismenn.github.io/lipar/">Webpage</a>
+              <a href="https://github.com/DennisMenn/lipar">GitHub</a>
+              <a href="https://arxiv.org/abs/2603.05811">arXiv</a>
+              <a href="https://x.com/MennDennis/status/2039011622581051576">X thread</a>
+            </div>
+          </div>
         </div>
       </article>
 
-      <article class="paper">
+      <article class="card">
         <figure>
           <img src="assets/artifact_dataset.png" alt="Original and artifact-injected images">
           <figcaption>Top: original images. Bottom: corrupted images, with green lines marking the regions where artifacts were injected.</figcaption>
         </figure>
         <div>
+          <div class="badges"><span class="badge">WACV 2026 · Under review</span></div>
           <h3><a href="https://arxiv.org/html/2509.19589v1">Synthesizing Artifact Dataset for Pixel-level Detection</a></h3>
           <p class="authors"><b>Dennis Menn</b>, Feng Liang, and Diana Marculescu</p>
-          <p class="venue">IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) 2026, under review.</p>
           <p>We propose a pipeline that automatically injects artifacts into clean, high-quality synthetic images on a predetermined region, thereby producing pixel-level annotations without manual labeling.</p>
+          <div class="chips"><a href="https://arxiv.org/html/2509.19589v1">arXiv</a></div>
         </div>
       </article>
 
-      <article class="paper">
+      <article class="card">
         <figure>
           <img src="assets/similarity_trajectories.jpg" alt="Similarity trajectories for an image with and without artifacts">
           <figcaption>An image with artifacts (left) and a natural-looking image (right), with their Similarity Trajectories.</figcaption>
         </figure>
         <div>
+          <div class="badges"><span class="badge">WACV 2025 Workshop</span></div>
           <h3><a href="assets/Similarity_Trajectories.pdf">Similarity Trajectories: Linking Sampling Process to Artifacts in Diffusion-Generated Images</a></h3>
           <p class="authors"><b>Dennis Menn</b>, Feng Liang, Hung-Yueh Chiang, and Diana Marculescu</p>
           <p class="venue">4th Workshop on Image/Video/Audio Quality in Computer Vision and Generative AI, WACV 2025</p>
           <p>We found that the presence of artifacts in images is related to the sampling process of the diffusion model, characterized by the "Similarity Trajectory".</p>
+          <div class="chips"><a href="assets/Similarity_Trajectories.pdf">Paper</a></div>
         </div>
       </article>
 
-      <article class="paper">
+      <article class="card">
         <img src="assets/adversarial.jpg" alt="Summed adversarial perturbations revealing a frog">
         <div>
+          <div class="badges"><span class="badge">Manuscript</span></div>
           <h3><a href="https://arxiv.org/pdf/2309.16878">Investigating Human-Identifiable Features Hidden In Adversarial Perturbations</a></h3>
           <p class="authors"><b>Dennis Menn</b>, Tzu-hsun Feng, Sriram Vishwanath, and Hung-yi Lee</p>
-          <p class="venue">Manuscript</p>
           <p>By summing adversarial perturbations from different models, human-identifiable features emerge, showing that adversarial perturbations are in fact comprehensible to humans.</p>
+          <div class="chips"><a href="https://arxiv.org/pdf/2309.16878">arXiv</a></div>
         </div>
       </article>
 
-      <article class="paper">
+      <article class="card">
         <img src="assets/gpt_artifacts.png" alt="GPT conversation about a bird with two beaks">
         <div>
+          <div class="badges"><span class="badge">Blog post</span></div>
           <h3><a href="https://medium.com/@dennismenn/can-gpt-models-detect-artifacts-in-images-635d235177c2">Can GPT Models Detect Artifacts in Images?</a></h3>
           <p class="authors"><b>Dennis Menn</b>, Alexandros Dimakis, and Diana Marculescu</p>
-          <p class="venue">Blog post</p>
           <p>GPT-4/4o models are good at recognizing objects but struggle to identify obvious errors in images generated by diffusion models. One explanation is that they only recognize key features rather than understanding the complete structure of objects.</p>
+          <div class="chips"><a href="https://medium.com/@dennismenn/can-gpt-models-detect-artifacts-in-images-635d235177c2">Medium</a></div>
         </div>
       </article>
     </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <ul class="timeline">
+        <li>
+          <span class="date">2023 — Present</span>
+          <p><b>Ph.D. in ECE</b>, University of Texas at Austin<br><span class="muted">Advised by Prof. Diana Marculescu</span></p>
+        </li>
+        <li>
+          <span class="date">2021 — 2023</span>
+          <p><b>M.S. in ECE</b>, National Taiwan University<br><span class="muted">Advised by Prof. Lin-shan Lee · GPA 4.26/4.30</span></p>
+        </li>
+        <li>
+          <span class="date">2017 — 2021</span>
+          <p><b>B.S. in ECE</b>, National Taiwan University<br><span class="muted">GPA 4.03/4.30</span></p>
+        </li>
+      </ul>
+    </section>
   </main>
+
+  <footer>© 2026 Dennis Menn</footer>
+
+  <script>
+    const video = document.querySelector('.demo video');
+    new IntersectionObserver(([entry]) => {
+      entry.isIntersecting ? video.play().catch(() => {}) : video.pause();
+    }, { threshold: 0.4 }).observe(video);
+  </script>
 </body>
 </html>
