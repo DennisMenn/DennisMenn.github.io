@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dennis Menn</title>
+  <meta name="description" content="Dennis Menn — Ph.D. student in ECE at UT Austin, working on efficient generative AI for computer vision.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img class="photo" src="assets/profile.jpg" alt="Dennis Menn">
+      <div>
+        <h1>Dennis Menn</h1>
+        <p>
+          I am a Ph.D. student in the ECE Department at <a href="https://www.utexas.edu/">UT Austin</a>,
+          where I am fortunate to be advised by
+          <a href="https://www.ece.utexas.edu/people/faculty/diana-marculescu">Prof. Diana Marculescu</a>.
+          I received my master's and bachelor's degrees from National Taiwan University.
+        </p>
+        <p>
+          My research focuses on generative AI for computer vision, with a particular interest in efficiency.
+          If you find that we have shared research interests, please feel free to reach out by email;
+          I am always open to potential collaborations.
+        </p>
+        <p class="links">
+          <a href="assets/Resume.pdf">Resume</a> /
+          <a href="https://www.linkedin.com/in/dennis-menn-425185289/">LinkedIn</a> /
+          <a href="https://github.com/DennisMenn">GitHub</a> /
+          <a href="mailto:dennismenn@utexas.edu">Email</a>
+        </p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Education</h2>
+      <ul>
+        <li><b>Ph.D. in ECE</b>, University of Texas at Austin, advised by Prof. Diana Marculescu, August 2023 — Present.</li>
+        <li><b>M.S. in ECE</b>, National Taiwan University, advised by Prof. Lin-shan Lee, GPA: 4.26/4.30, August 2021 — July 2023.</li>
+        <li><b>B.S. in ECE</b>, National Taiwan University, GPA: 4.03/4.30, August 2017 — June 2021.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Research</h2>
+
+      <article class="paper">
+        <img src="assets/lipar.png" alt="LIPAR results">
+        <div>
+          <h3>Training-Free Latent Inter-frame Pruning with Attention Recovery</h3>
+          <p class="authors"><b>Dennis Menn</b>, Yuedong Yang, Bokun Wang, et al.</p>
+          <p>Proposed a training-free framework that adapts pixel-space compression techniques to latent pruning for video generation. Achieved an average 1.53× throughput boost (19.3 FPS on an RTX 4090) and a 20% memory reduction, without compromising visual quality.</p>
+          <p class="links">
+            <a href="https://dennismenn.github.io/lipar/">Webpage</a> /
+            <a href="https://github.com/DennisMenn/lipar">GitHub</a> /
+            <a href="https://arxiv.org/abs/2603.05811">arXiv</a>
+          </p>
+        </div>
+      </article>
+
+      <article class="paper">
+        <figure>
+          <img src="assets/artifact_dataset.png" alt="Original and artifact-injected images">
+          <figcaption>Top: original images. Bottom: corrupted images, with green lines marking the regions where artifacts were injected.</figcaption>
+        </figure>
+        <div>
+          <h3><a href="https://arxiv.org/html/2509.19589v1">Synthesizing Artifact Dataset for Pixel-level Detection</a></h3>
+          <p class="authors"><b>Dennis Menn</b>, Feng Liang, and Diana Marculescu</p>
+          <p class="venue">IEEE/CVF Winter Conference on Applications of Computer Vision (WACV) 2026, under review.</p>
+          <p>We propose a pipeline that automatically injects artifacts into clean, high-quality synthetic images on a predetermined region, thereby producing pixel-level annotations without manual labeling.</p>
+        </div>
+      </article>
+
+      <article class="paper">
+        <figure>
+          <img src="assets/similarity_trajectories.jpg" alt="Similarity trajectories for an image with and without artifacts">
+          <figcaption>An image with artifacts (left) and a natural-looking image (right), with their Similarity Trajectories.</figcaption>
+        </figure>
+        <div>
+          <h3><a href="assets/Similarity_Trajectories.pdf">Similarity Trajectories: Linking Sampling Process to Artifacts in Diffusion-Generated Images</a></h3>
+          <p class="authors"><b>Dennis Menn</b>, Feng Liang, Hung-Yueh Chiang, and Diana Marculescu</p>
+          <p class="venue">4th Workshop on Image/Video/Audio Quality in Computer Vision and Generative AI, WACV 2025</p>
+          <p>We found that the presence of artifacts in images is related to the sampling process of the diffusion model, characterized by the "Similarity Trajectory".</p>
+        </div>
+      </article>
+
+      <article class="paper">
+        <img src="assets/adversarial.jpg" alt="Summed adversarial perturbations revealing a frog">
+        <div>
+          <h3><a href="https://arxiv.org/pdf/2309.16878">Investigating Human-Identifiable Features Hidden In Adversarial Perturbations</a></h3>
+          <p class="authors"><b>Dennis Menn</b>, Tzu-hsun Feng, Sriram Vishwanath, and Hung-yi Lee</p>
+          <p class="venue">Manuscript</p>
+          <p>By summing adversarial perturbations from different models, human-identifiable features emerge, showing that adversarial perturbations are in fact comprehensible to humans.</p>
+        </div>
+      </article>
+
+      <article class="paper">
+        <img src="assets/gpt_artifacts.png" alt="GPT conversation about a bird with two beaks">
+        <div>
+          <h3><a href="https://medium.com/@dennismenn/can-gpt-models-detect-artifacts-in-images-635d235177c2">Can GPT Models Detect Artifacts in Images?</a></h3>
+          <p class="authors"><b>Dennis Menn</b>, Alexandros Dimakis, and Diana Marculescu</p>
+          <p class="venue">Blog post</p>
+          <p>GPT-4/4o models are good at recognizing objects but struggle to identify obvious errors in images generated by diffusion models. One explanation is that they only recognize key features rather than understanding the complete structure of objects.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
