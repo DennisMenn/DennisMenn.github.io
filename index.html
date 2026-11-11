@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
   <nav class="topnav">
@@ -90,6 +90,10 @@
       <h2>Research</h2>
 
       <article class="card featured">
+        <div class="demo">
+          <video class="r169" src="mpeg-diffusion/static/media/overview/overview.mp4" poster="mpeg-diffusion/static/media/overview/overview.jpg" muted loop playsinline controls preload="metadata"></video>
+          <p class="demo-caption"><span>Overview video (1 min): MPEG-Diffusion generates the important region at high resolution and the rest at low resolution, up to 4.8× faster (<a href="https://dennismenn.github.io/mpeg-diffusion/">project page</a>)</span></p>
+        </div>
         <div class="card-body">
           <img src="assets/mpeg_diffusion.jpg" alt="MPEG-Diffusion: Mixed-Resolution Video Generation">
           <div>
@@ -212,10 +216,12 @@
   <footer>© 2026 Dennis Menn</footer>
 
   <script>
-    const video = document.querySelector('.demo video');
-    new IntersectionObserver(([entry]) => {
-      entry.isIntersecting ? video.play().catch(() => {}) : video.pause();
-    }, { threshold: 0.4 }).observe(video);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        isIntersecting ? target.play().catch(() => {}) : target.pause();
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.demo video').forEach((video) => observer.observe(video));
   </script>
 </body>
 </html>
