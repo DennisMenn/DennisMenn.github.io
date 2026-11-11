@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MPEG-Diffusion: Mixed-Resolution Video Generation</title>
+  <meta name="description" content="MPEG-Diffusion: Mixed-Resolution Video Generation.">
+  <link rel="stylesheet" href="static/css/site.css?v=127">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-brand" href="#top">MPEG-Diffusion</a>
+  <a href="#apps">Applications</a>
+  <a href="#compare">Comparison</a>
+  <a href="#method">Method</a>
+  <a href="#human-eval">Experimental results</a>
+</nav>
+
+<header class="hero" id="top">
+  <h1><span class="brand">MPEG-Diffusion:</span> Mixed-Resolution Video Generation</h1>
+  <p class="authors">
+    <span>Dennis Menn<sup>1,2</sup></span> <span>Tianpei Gu<sup>2</sup></span> <span>Guande He<sup>2</sup></span>
+    <span>Aryan V S<sup>2</sup></span> <span>Yanke Song<sup>2</sup></span>
+    <span>Nan Liu<sup>2</sup></span> <span>Desai Xie<sup>2</sup></span> <span>Xun Huang<sup>2</sup></span>
+    <span>Chenfeng Xu<sup>1</sup></span> <span>Diana Marculescu<sup>1</sup></span>
+  </p>
+  <p class="affils"><span><sup>1</sup>UT Austin</span> <span><sup>2</sup>Roblox</span></p>
+  <div class="buttons">
+    <a class="btn" href="https://arxiv.org/abs/2611.12069">Paper</a>
+    <a class="btn disabled" aria-disabled="true">Code (soon)</a>
+    <a class="btn" href="static/media/overview/overview.mp4?v=2">&#9654; Watch the video (1 min)</a>
+  </div>
+  <p class="tldr">
+    Generates the <b>important region at high res</b> and the rest at low res: <b>up to 4.8&times; faster</b> at <b>near full-resolution quality</b>, with <b>no preset high-res region</b>.
+  </p>
+</header>
+
+<main>
+
+  <!-- ===== BEGIN Hero (self-contained block) ===== -->
+  <section id="teaser" class="wide">
+    <div class="stage-wrap">
+      <button type="button" class="stage-arrow prev" id="teaser-prev" aria-label="Previous clip">&lsaquo;</button>
+      <div class="player" id="teaser-player">
+        <video id="teaser-video" muted loop playsinline autoplay preload="metadata"></video>
+        <canvas id="teaser-canvas" aria-hidden="true"></canvas>
+      </div>
+      <button type="button" class="stage-arrow next" id="teaser-next" aria-label="Next clip">&rsaquo;</button>
+    </div>
+    <div class="toolbar">
+      <label class="switch"><input type="checkbox" id="teaser-toggle" checked><span class="slider"></span>Show tokens</label>
+      <span class="legend" id="teaser-legend">
+        <span><i class="sw hr"></i>high-res region</span>
+        <span><i class="sw lr"></i>low-res background</span>
+      </span>
+      <span class="stats-line" id="teaser-stats"></span>
+    </div>
+    <div class="thumbs" id="teaser-thumbs" role="tablist" aria-label="Teaser clips"></div>
+    <div class="prompt-bar" id="teaser-prompt-bar" title="Click to expand / collapse prompt">
+      <span class="prompt-tag">Prompt</span>
+      <span class="prompt-text" id="teaser-prompt"></span>
+    </div>
+  </section>
+  <!-- ===== END Hero ===== -->
+
+  <!-- ===== BEGIN Applications (self-contained block) ===== -->
+  <section id="apps">
+    <h2>Applications</h2>
+    <div class="apps-top">
+      <label class="switch"><input type="checkbox" id="apps-toggle"><span class="slider"></span>Show tokens</label>
+      <span class="legend" id="apps-legend">
+        <span><i class="sw hr"></i>high-res region</span>
+        <span><i class="sw lr"></i>low-res background</span>
+      </span>
+    </div>
+    <div class="grid3" id="apps-glance"></div>
+    <details class="more" id="apps-more">
+      <summary><span class="when-closed">More examples &darr;</span><span class="when-open">Collapse examples &uarr;</span></summary>
+      <div class="grid3" id="apps-extra"></div>
+    </details>
+  </section>
+  <!-- ===== END Applications ===== -->
+
+  <!-- ===== BEGIN Comparison (self-contained block) ===== -->
+  <section id="compare">
+    <h2>Comparison with prior and concurrent methods</h2>
+    <div class="tabs" id="compare-tabs" role="tablist"></div>
+    <div id="compare-pair"></div>
+    <div class="dots-nav" id="compare-dots" role="tablist" aria-label="Comparison clips"></div>
+  </section>
+  <!-- ===== END Comparison ===== -->
+
+  <!-- ===== BEGIN Method (self-contained block) ===== -->
+  <section id="method">
+    <h2>Method</h2>
+    <div class="figure" id="fig-method" tabindex="0" aria-label="Method figure, step through with the arrow keys">
+      <div class="fig-frame framed" id="method-frame"><video id="method-video" src="static/media/method/method.mp4?v=16" poster="static/media/method/method.jpg?v=16" muted playsinline preload="auto" aria-label="MPEG-Diffusion method animation"></video></div>
+      <div class="figbar">
+        <p class="steplabel" id="method-label" aria-live="polite"></p>
+        <div class="figctl" id="method-ctl"></div>
+      </div>
+    </div>
+    <div class="contribs" id="method-contribs">
+      <div class="contrib" data-step="2">
+        <h3><span class="sl-n">2.</span>Self-selected HR region</h3>
+        <p><span class="k">Prior methods need a preset HR region:</span> The early denoising steps are too blurry to externally detect the HR region from the video, so it must be given before generation.</p>
+        <p class="fix"><span class="k">Fix:</span> The DiT already knows where the important subject is. A single linear layer on its intermediate features picks the HR region during denoising, so no region input is needed (<a href="limitations.html#region">examples</a>).</p>
+      </div>
+      <div class="contrib" data-step="4">
+        <h3><span class="sl-n">4.</span>Dual-resolution attention</h3>
+        <p><span class="k">Curse of mixed resolution:</span> When HR and LR tokens share one K/V cache, we prove that no single LR token can match the attention of the four HR tokens it replaces, even with fine-tuning.</p>
+        <p class="fix"><span class="k">Fix:</span> Keep separate HR and LR K/V caches so each query reads K/V at its own resolution, using a linear map to fill in the missing K/V from the other resolution (<a href="limitations.html#attention">examples</a>).</p>
+      </div>
+      <div class="contrib" data-step="5">
+        <h3><span class="sl-n">5.</span>Mixed-resolution decoder</h3>
+        <p><span class="k">Resolution mismatch:</span> Decoding the HR and LR latents separately and pasting them together causes visible distortion and a seam along the resolution boundary, even for latents encoded from real videos.</p>
+        <p class="fix"><span class="k">Fix:</span> Merge the HR and LR latents into a single unified latent before decoding, so the VAE decodes a seamless video (<a href="limitations.html#decoder">examples</a>).</p>
+      </div>
+    </div>
+  </section>
+  <!-- ===== END Method ===== -->
+
+  <!-- ===== BEGIN Experimental results (self-contained block) ===== -->
+  <section id="human-eval">
+    <h2>Experimental results</h2>
+    <div class="card-panel">
+      <div class="he-header">
+        <div class="table-title">Human evaluation <span id="he-lead"></span></div>
+        <div class="legend">
+          <span><i class="sw ours"></i>ours preferred</span>
+          <span><i class="sw base"></i>baseline preferred</span>
+        </div>
+      </div>
+      <div class="bars" id="he-bars"></div>
+    </div>
+
+    <div class="card-panel table-card">
+      <div class="table-title">Quantitative benchmark <span>(Wan2.1 14B, 720p, 81 frames; MovieGen and VBench prompts)</span></div>
+      <div class="table-wrap">
+        <table class="results">
+          <thead>
+            <tr><th>Method</th><th>Tokens</th><th>Speed-up</th><th>MANIQA&thinsp;&uarr;</th><th>Imaging&thinsp;&uarr;</th>
+              <th>DOVER&thinsp;&uarr;</th><th>VBench Q.&thinsp;&uarr;</th><th>Extra condition</th></tr>
+          </thead>
+          <tbody>
+            <tr class="ref"><td>Full resolution</td><td>100%</td><td>1.0&times;</td><td>0.445</td><td>0.671</td><td>0.819</td><td>85.3</td><td>&ndash;</td></tr>
+            <tr><td>Phase-Aligned RoPE</td><td>30%</td><td><b>5.2&times;</b></td><td>0.293</td><td>0.622</td><td>0.757</td><td>83.8</td><td class="bad">region</td></tr>
+            <tr><td>Foveated Diffusion</td><td>30%</td><td><b>5.2&times;</b></td><td>0.300</td><td>0.619</td><td>0.743</td><td><b>83.9</b></td><td class="bad">region</td></tr>
+            <tr class="ours"><td>MPEG-Diffusion (ours)</td><td>30%</td><td>4.8&times;</td><td><b>0.397</b></td><td><b>0.644</b></td><td><b>0.794</b></td><td><b>83.9</b></td><td class="good">none</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+  <!-- ===== END Experimental results ===== -->
+
+  <section id="flux-images">
+    <h2>Text-to-image</h2>
+    <p class="sec-lead">MPEG-Diffusion also applies to image generation; here we use FLUX.2 4B (1024&times;1024) as an example.</p>
+    <div class="apps-top">
+      <label class="switch"><input type="checkbox" id="flux-toggle"><span class="slider"></span>Show tokens</label>
+      <span class="legend off" id="flux-legend">
+        <span><i class="sw hr"></i>high-res region</span>
+        <span><i class="sw lr"></i>low-res background</span>
+      </span>
+    </div>
+    <div class="grid3 flux-grid" id="flux-grid"></div>
+    <details class="more" id="flux-more">
+      <summary><span class="when-closed">More examples &darr;</span><span class="when-open">Collapse examples &uarr;</span></summary>
+      <div class="grid3 flux-grid" id="flux-extra"></div>
+    </details>
+  </section>
+
+  <!-- ===== BEGIN Limitations ===== -->
+  <section id="limitations">
+    <h2>Limitations</h2>
+    <ul class="card-panel limits">
+      <li id="limitation-examples">For fast-moving backgrounds, the transition between the low- and high-resolution regions can occasionally be noticeable (<a href="limitations.html#limitation-examples">examples</a>).</li>
+      <li>We currently train only a linear head to pick the self-selected region; end-to-end fine-tuning is a promising next step.</li>
+    </ul>
+  </section>
+  <!-- ===== END Limitations ===== -->
+
+  <!-- ===== BEGIN Citation (self-contained block) ===== -->
+  <section id="cite">
+    <h2>Citation</h2>
+    <div class="bibbox">
+      <pre class="bibtex" id="bib-text">@inproceedings{mpegdiffusion2027,
+  title     = {MPEG-Diffusion: Mixed-Resolution Video Generation},
+  author    = {Menn, Dennis and Gu, Tianpei and He, Guande and V S, Aryan and Song, Yanke and
+               Liu, Nan and Xie, Desai and Huang, Xun and Xu, Chenfeng and Marculescu, Diana},
+  booktitle = {Under review},
+  year      = {2027}
+}</pre>
+      <button type="button" class="copy" id="copy-bib" aria-label="Copy BibTeX">Copy</button>
+    </div>
+  </section>
+  <!-- ===== END Citation ===== -->
+
+</main>
+
+
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="lb-nav lb-prev" id="lb-prev" aria-label="Previous video" hidden>&lsaquo;</button>
+  <div class="lightbox-card" role="dialog" aria-modal="true">
+    <div class="lightbox-top">
+      <div class="lightbox-title" id="lb-title"></div>
+      <div class="lightbox-controls">
+        <span class="lb-counter" id="lb-counter" hidden></span>
+        <label class="switch" id="lb-tok-wrap"><input type="checkbox" id="lb-toggle"><span class="slider"></span>Show tokens</label>
+        <button type="button" class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+      </div>
+    </div>
+    <div class="player" id="lb-player">
+      <video id="lb-video" muted loop playsinline autoplay></video>
+      <canvas id="lb-canvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="prompt-bar expanded" id="lb-prompt-bar">
+      <span class="prompt-tag">Prompt</span>
+      <span class="prompt-text" id="lb-prompt"></span>
+    </div>
+  </div>
+  <button type="button" class="lb-nav lb-next" id="lb-next" aria-label="Next video" hidden>&rsaquo;</button>
+</div>
+
+<script src="static/js/site_data.js?v=39"></script>
+<script src="static/js/compare_focus.js?v=9"></script>
+<script src="static/js/site.js?v=93"></script>
+<script src="static/js/method.js?v=10"></script>
+<script>
+(function () {
+  const glance = [
+    { id: 10, title: "Royal guard", tokens: "32.9%",
+      prompt: "A soldier in a red uniform with a black bearskin hat stands guard in a sentry box. The backdrop features a stone wall with an arched entrance, a lamp post, and a large window. Sunlight casts a warm glow on the scene." },
+    { id: 35, title: "Holstein cow", tokens: "39.8%",
+      prompt: "A black and white Holstein cow stands in a field, gazing directly at the camera. It has distinctive yellow ear tags with numbers visible. The background features a clear blue sky." },
+    { id: 48, title: "Man in sunglasses", tokens: "40.7%",
+      prompt: "A young man wearing sunglasses smiles while leaning against a wall illuminated by soft red neon light. He has short hair and is dressed in a red, textured sweater, with his arms crossed and a relaxed posture. The glowing sign behind him contributes to the vibrant ambiance of the scene." },
+  ];
+  const extra = [
+    { id: 13, title: "Autumn skateboard", tokens: "35.2%",
+      prompt: "A close-up of a skateboard resting on a ground covered with colorful autumn leaves. The skateboard has worn wheels, with some dirt on them, and the surface shows signs of use. The leaves are a mix of orange, red, and brown hues, creating a seasonal backdrop." },
+    { id: 28, title: "Mug held in a hand", tokens: "40.6%",
+      prompt: "A hand holds a white ceramic mug featuring the words “MAGNIFICENT Mum” in bold black and gold lettering. The background is softly blurred, depicting a bright, natural setting." },
+    { id: 49, title: "Riverside boats", tokens: "36.0%",
+      prompt: "A riverside scene featuring a cluster of boats, including a red and white motorboat, anchored near a historic building with a tall, pointed tower. The building, characterized by large windows and a white façade, stands beside lush green trees. A clear blue sky and calm water reflect the serene atmosphere." },
+  ];
+  const toggle = document.getElementById("flux-toggle");
+  const legend = document.getElementById("flux-legend");
+  const grids = [document.getElementById("flux-grid"), document.getElementById("flux-extra")];
+  const base = "static/media/flux_images/f";
+  const items = [];
+  [glance, extra].forEach((list, g) => list.forEach((it) => {
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = `<a class="flux-img" target="_blank" title="Click to open the full 1024×1024 image">` +
+      `<img class="dec" src="${base}${it.id}_img_sm.jpg" alt="${it.title}">` +
+      `<img class="tok" src="${base}${it.id}_layout_sm.jpg" alt="${it.title} (token layout)">` +
+      `<span class="hover-prompt">${it.prompt}</span></a>` +
+      `<div class="cap"><span>${it.tokens} tokens</span></div>`;
+    it.a = el.querySelector("a");
+    grids[g].appendChild(el);
+    items.push(it);
+  }));
+  const render = () => {
+    grids.forEach((g) => g.classList.toggle("show-tok", toggle.checked));
+    items.forEach((it) => { it.a.href = `${base}${it.id}_${toggle.checked ? "layout" : "img"}.jpg`; });
+    legend.classList.toggle("off", !toggle.checked);
+  };
+  toggle.addEventListener("change", render);
+  render();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MPEG-Diffusion: Method &amp; Limitation Examples</title>
+  <link rel="stylesheet" href="static/css/site.css?v=127">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#region">Self-selected HR region</a>
+  <a href="#attention">Dual-resolution attention</a>
+  <a href="#decoder">Mixed-resolution decoder</a>
+  <a href="#limitation-examples">Limitations</a>
+  <a class="nav-back" href="index.html#method">&larr; Back to Main Page</a>
+</nav>
+
+<main>
+  <section id="region" class="wide">
+    <h2><span class="sl-n">2.</span>Self-selected HR region</h2>
+    <p class="sec-lead">We generate 720p videos on Wan2.1 14B from the text prompt only. Even early in denoising (<i>k</i> = 25), a linear head on the 13th DiT layer selects the HR region <i>M</i> without any region input; as shown below, the selected region (green) matches the visually important subject.</p>
+    <div class="stage-wrap">
+      <button type="button" class="stage-arrow prev" id="pf-region-prev" aria-label="Previous clip">&lsaquo;</button>
+      <div class="player" id="pf-region-player">
+        <video id="pf-region-video" muted loop playsinline autoplay preload="metadata"></video>
+        <canvas id="pf-region-canvas" aria-hidden="true"></canvas>
+      </div>
+      <button type="button" class="stage-arrow next" id="pf-region-next" aria-label="Next clip">&rsaquo;</button>
+    </div>
+    <div class="toolbar" id="pf-region-toolbar">
+      <label class="switch"><input type="checkbox" id="pf-region-toggle" checked><span class="slider"></span>Show tokens</label>
+      <span class="legend" id="pf-region-legend">
+        <span><i class="sw hr"></i>high-res region</span>
+        <span><i class="sw lr"></i>low-res background</span>
+      </span>
+      <span class="stats-line" id="pf-region-stats"></span>
+    </div>
+    <div class="prompt-bar" id="pf-region-prompt-bar" title="Click to expand / collapse prompt">
+      <span class="prompt-tag">Prompt</span>
+      <span class="prompt-text" id="pf-region-prompt"></span>
+    </div>
+    <div class="dots-nav" id="pf-region-dots" role="tablist" aria-label="Self-selected HR region clips"></div>
+  </section>
+
+  <section id="attention" class="wide">
+    <h2><span class="sl-n">4.</span>Dual-resolution attention</h2>
+    <p class="sec-lead">We fix all other factors and compare dual-resolution attention (ours) against a shared K/V cache on <b>Wan2.1 1.3B (480p)</b>, trained for 5,000 steps. Due to the curse of mixed resolution, the shared K/V cache produces much stronger distortion along the seam.</p>
+    <div id="pf-attention-pair"></div>
+    <div class="dots-nav" id="pf-attention-dots" role="tablist" aria-label="Dual-resolution attention clips"></div>
+  </section>
+
+  <section id="decoder" class="wide">
+    <h2><span class="sl-n">5.</span>Mixed-resolution decoder</h2>
+    <p class="sec-lead">We encode real videos at 480p (HR) and 240p (LR), keep the 480p latent inside a moving circle and the 240p latent outside, and compare our mixed-resolution decoder against resize-and-paste (which fills in each latent&rsquo;s missing region, decodes them separately, and pastes the results together). Merging the two latents into a unified latent before decoding is critical to avoid distortion along the seam.</p>
+    <div id="pf-decoder-pair"></div>
+    <div class="dots-nav" id="pf-decoder-dots" role="tablist" aria-label="Mixed-resolution decoder clips"></div>
+  </section>
+
+  <section id="limitation-examples" class="wide">
+    <h2>Limitation examples: fast motion</h2>
+    <p class="sec-lead">For fast-moving backgrounds, the transition between the low- and high-resolution regions can occasionally be noticeable.</p>
+    <div class="apps-top">
+      <label class="switch"><input type="checkbox" id="apps-toggle"><span class="slider"></span>Show tokens</label>
+      <span class="legend off" id="apps-legend">
+        <span><i class="sw hr"></i>high-res region</span>
+        <span><i class="sw lr"></i>low-res background</span>
+      </span>
+    </div>
+    <div class="grid3" id="lim-grid"></div>
+  </section>
+</main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button type="button" class="lb-nav lb-prev" id="lb-prev" aria-label="Previous video" hidden>&lsaquo;</button>
+  <div class="lightbox-card" role="dialog" aria-modal="true">
+    <div class="lightbox-top">
+      <div class="lightbox-title" id="lb-title"></div>
+      <div class="lightbox-controls">
+        <span class="lb-counter" id="lb-counter" hidden></span>
+        <label class="switch" id="lb-tok-wrap"><input type="checkbox" id="lb-toggle"><span class="slider"></span>Show tokens</label>
+        <button type="button" class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+      </div>
+    </div>
+    <div class="player" id="lb-player">
+      <video id="lb-video" muted loop playsinline autoplay></video>
+      <canvas id="lb-canvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="prompt-bar expanded" id="lb-prompt-bar">
+      <span class="prompt-tag">Details</span>
+      <span class="prompt-text" id="lb-prompt"></span>
+    </div>
+  </div>
+  <button type="button" class="lb-nav lb-next" id="lb-next" aria-label="Next video" hidden>&rsaquo;</button>
+</div>
+
+<script src="static/js/limitations_data.js?v=15"></script>
+<script src="static/js/site.js?v=93"></script>
+</body>
+</html>
